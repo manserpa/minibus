@@ -3,11 +3,11 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.matsim</groupId>
-	<artifactId>matsim-example-project</artifactId>
+	<artifactId>formal_minibus</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
-	<name>MATSim example project</name>
-	<description>MATSim example project</description>
+	<name>MATSim formal minibus</name>
+	<description>MATSim formal minibus</description>
 
 	<repositories>
 		<!-- Repository for MATSim releases (MATSim is not on Maven central) -->
