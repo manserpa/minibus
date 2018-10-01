@@ -1,9 +1,9 @@
 /* *********************************************************************** *
- * project: org.matsim.*												   *
+ * project: org.matsim.*
  *                                                                         *
  * *********************************************************************** *
  *                                                                         *
- * copyright       : (C) 2008 by the members listed in the COPYING,        *
+ * copyright       : (C) 2012 by the members listed in the COPYING,        *
  *                   LICENSE and WARRANTY file.                            *
  * email           : info at matsim dot org                                *
  *                                                                         *
@@ -16,38 +16,36 @@
  *   See also COPYING, LICENSE and WARRANTY file                           *
  *                                                                         *
  * *********************************************************************** */
-package org.matsim.run;
 
-import org.matsim.api.core.v01.Scenario;
-import org.matsim.core.config.Config;
-import org.matsim.core.config.ConfigUtils;
-import org.matsim.core.controler.Controler;
-import org.matsim.core.controler.OutputDirectoryHierarchy.OverwriteFileSetting;
-import org.matsim.core.scenario.ScenarioUtils;
+package org.matsim.contrib.minibus.stats.abtractPAnalysisModules;
+
+import org.matsim.api.core.v01.Id;
+import org.matsim.pt.transitSchedule.api.TransitLine;
+import org.matsim.pt.transitSchedule.api.TransitSchedule;
+
+import java.util.HashMap;
 
 /**
- * @author nagel
+ * Some common methods for setting public transit modes for each public transit line.
+ * This information should come from the mode set in the schedule itself.
+ * As of now August 2012, it is not clear what the transport mode in the schedule is ment to be.
+ * 
+ * @author aneumann
  *
  */
-public class RunMatsim {
+public interface LineId2PtMode {
 
-	public static void main(String[] args) {
-		
-		Config config ;
-		if ( args.length==0 || args[0]=="" ) {
-			config = ConfigUtils.loadConfig( "scenarios/equil/config.xml" ) ;
-			config.controler().setLastIteration(1);
-			config.controler().setOverwriteFileSetting( OverwriteFileSetting.deleteDirectoryIfExists );
-		} else {
-			config = ConfigUtils.loadConfig(args[0]) ;
-		}
-		
-		Scenario scenario = ScenarioUtils.loadScenario(config) ;
-
-		Controler controler = new Controler( scenario ) ;
-
-		controler.run();
-
-	}
-
+	/**
+	 * 
+	 * @param transitSchedule Transit schedule with the lines
+	 * @param pIdentifier A String identifying paratransit lines
+	 */
+	void setPtModesForEachLine(TransitSchedule transitSchedule, String pIdentifier);
+	
+	/**
+	 * 
+	 * @return Returns one public transit mode for each line id
+	 */
+	HashMap<Id<TransitLine>, String> getLineId2ptModeMap();
+	
 }

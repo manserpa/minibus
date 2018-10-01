@@ -2,37 +2,35 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.matsim</groupId>
-	<artifactId>formal_minibus</artifactId>
+	<groupId>org.matsim.minibus</groupId>
+	<artifactId>minibus_manserpa</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
-	<name>MATSim formal minibus</name>
-	<description>MATSim formal minibus</description>
+	<properties>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+	</properties>
 
 	<repositories>
-		<!-- Repository for MATSim releases (MATSim is not on Maven central) -->
+		<!-- Needed for geotools in matsim main -->
 		<repository>
-			<id>matsim</id>
-			<url>https://dl.bintray.com/matsim/matsim</url>
+			<id>osgeo</id>
+			<name>Geotools repository</name>
+			<url>http://download.osgeo.org/webdav/geotools</url>
+		</repository>
+		<repository>
+			<id>matsim-eth</id>
+			<url>http://dl.bintray.com/matsim-eth/matsim</url>
+		</repository>
+		<repository>
+			<id>matsim-eth-packagecloud</id>
+			<url>https://packagecloud.io/eth-ivt/matsim/maven2</url>
+		</repository>
+		<repository>
+			<id>eth-playgrounds-packagecloud</id>
+			<url>https://packagecloud.io/eth-ivt/playgrounds/maven2</url>
 		</repository>
 	</repositories>
-
-	<dependencies>
-		<!-- This is the matsim "core": -->
-		<dependency>
-			<groupId>org.matsim</groupId>
-			<artifactId>matsim</artifactId>
-			<version>0.10.0</version>
-		</dependency>
-
-		<!-- Include the JUnit testing library -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.12</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
 
 	<build>
 		<plugins>
@@ -88,4 +86,43 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+		<profile>
+			<id>zip</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-resources-plugin</artifactId>
+						<version>3.0.2</version>
+					</plugin>
+					<plugin>
+						<artifactId>maven-assembly-plugin</artifactId>
+						<version>2.5.3</version>
+						<configuration>
+							<descriptor>src/main/assembly/assembly-release.xml</descriptor>
+						</configuration>
+						<executions>
+							<execution>
+								<id>create-archive</id>
+								<phase>package</phase>
+								<goals>
+									<goal>single</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+	<dependencies>
+		<dependency>
+			<groupId>ch.ethz.matsim.projects</groupId>
+			<artifactId>astra</artifactId>
+			<version>0.0.1-PM</version>
+		</dependency>
+	</dependencies>
 </project>
