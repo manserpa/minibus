@@ -71,25 +71,9 @@ public class PPlanRouter implements PlanAlgorithm, PersonAlgorithm {
         final List<Trip> trips = TripStructureUtils.getTrips( plan , routingHandler.getStageActivityTypes() );
 
         for (Trip oldTrip : trips) {
-            boolean hasParaLeg = false;
+            boolean hasParaLeg = hasParaLeg(oldTrip);
 
-            for(Leg leg: oldTrip.getLegsOnly())  {
-                if(leg.getRoute() instanceof EnrichedTransitRoute)  {
-                    EnrichedTransitRoute route = (EnrichedTransitRoute) leg.getRoute();
-                    if(route.getTransitLineId().toString().contains("para")) {
-                        hasParaLeg = true;
-                    }
-                }
-            }
-
-            if(!hasParaLeg)  {
-                TripRouter.insertTrip(
-                        plan,
-                        oldTrip.getOriginActivity(),
-                        oldTrip.getTripElements(),
-                        oldTrip.getDestinationActivity());
-            }
-            else {
+            if(hasParaLeg) {
                 final List<? extends PlanElement> newTrip =
                         routingHandler.calcRoute(
                                 routingHandler.getMainModeIdentifier().identifyMainMode(oldTrip.getTripElements()),
@@ -105,6 +89,18 @@ public class PPlanRouter implements PlanAlgorithm, PersonAlgorithm {
                         oldTrip.getDestinationActivity());
             }
         }
+    }
+
+    private static boolean hasParaLeg(Trip trip) {
+        for(Leg leg: trip.getLegsOnly())  {
+            if(leg.getRoute() instanceof EnrichedTransitRoute)  {
+                EnrichedTransitRoute route = (EnrichedTransitRoute) leg.getRoute();
+                if(route.getTransitLineId().toString().contains("para")) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**

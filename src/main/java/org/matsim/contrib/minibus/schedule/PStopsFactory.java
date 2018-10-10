@@ -32,7 +32,6 @@ import org.matsim.pt.transitSchedule.api.TransitSchedule;
 public final class PStopsFactory {
 
 	public static TransitSchedule createPStops(Network network, PConfigGroup pConfig, TransitSchedule transitSchedule){
-		// return CreateStopsForAllCarLinks.createStopsForAllCarLinks(network, pConfig, transitSchedule);
 		return CreatePStops.createPStops(network, pConfig, transitSchedule);
 	}
 	

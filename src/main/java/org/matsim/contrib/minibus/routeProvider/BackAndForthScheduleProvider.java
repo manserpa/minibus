@@ -275,8 +275,7 @@ final class BackAndForthScheduleProvider implements PRouteProvider{
 			
 			// this is true if the operator really wants to serve a stop on this link
 			if (tempStopsToBeServed.get(k).getLinkId().equals(link.getId()))	{
-				
-				// different from {@link ComplexCircleScheduleProvider}		
+
 				if(isSameStopSequenceAsLastIteration)	{
 					if(tempStopsToBeServed.get(k).equals(this.handler.getServedStopsInLastIteration(routeID, stops.size())))	{
 						double runningTimeMod = modifyRunningTimeAccordingToTheLastIterationIfPossible(runningTime, 
@@ -314,8 +313,7 @@ final class BackAndForthScheduleProvider implements PRouteProvider{
 				
 				// hier muss jetzt geprüft werden, ob die Anzahl Aktivitäten überdurchschnittlich hoch sind
 				if(this.randomStopProvider.hasHighNumberOfActivitiesInGrid(gridNode))	{
-					
-					// different from {@link ComplexCircleScheduleProvider}
+
 					if(isSameStopSequenceAsLastIteration)	{
 						if(this.linkId2StopFacilityMap.get(link.getId()).equals(this.handler.getServedStopsInLastIteration(routeID, stops.size())))	{
 							double runningTimeMod = modifyRunningTimeAccordingToTheLastIterationIfPossible(runningTime, 
@@ -347,8 +345,7 @@ final class BackAndForthScheduleProvider implements PRouteProvider{
 		// manserpa: I think this is not necessary anymore
 		
 		runningTime += (this.net.getLinks().get(tempStopsToBeServed.get(tempStopsToBeServed.size()-1).getLinkId()).getLength() / (Math.min(this.vehicleMaximumVelocity, this.net.getLinks().get(tempStopsToBeServed.get(tempStopsToBeServed.size()-1).getLinkId()).getFreespeed()) * this.planningSpeedFactor));
-		
-		// different from {@link ComplexCircleScheduleProvider}
+
 		if(isSameStopSequenceAsLastIteration)	{
 			if(tempStopsToBeServed.get(tempStopsToBeServed.size()-1).equals(this.handler.getServedStopsInLastIteration(routeID, stops.size())))	{
 				double runningTimeMod = modifyRunningTimeAccordingToTheLastIterationIfPossible(runningTime, this.handler.getOffsetForRouteAndStopNumber(routeID, stops.size()));

@@ -38,26 +38,10 @@ public final class PModule extends AbstractModule {
 		bind(PTransitRouterFactory.class).toInstance(pTransitRouterFactory);
 
 		addControlerListenerBinding().to(PControlerListener.class);
-		//addControlerListenerBinding().toInstance( pTransitRouterFactory ) ;
-
-		// (needs to be injected _after_ PControlerListener, so that it is executed _before_ PControlerListener.
-		// yyyy injecting the TransitRouterFactory besides the TransitRouter is a fix to re-configure the factory in every iteration.
-		// A more general solution suggested by MZ would be to define an iteration scope.  Then the factory could be forced
-		// to reconstruct itself in every iteration, thus pulling new information (in this case the updated transit schedule)
-		// by itself.  Is on the "list", has not been done yet, will be done eventually, until then this remains the way it is.
-		// kai, jan'17)
-
-		// TODO (PM) Do we need this?
-		/*
-		String outputSubsidy = ConfigUtils.addOrGetModule(getConfig(), ControlerConfigGroup.class ).getOutputDirectory() + "/run.StopsToSubsidize.csv";
-		ConfigUtils.addOrGetModule(getConfig(), PConfigGroup.class ).setInitialSubsidyFile(outputSubsidy);
-		*/
 
 		bind(TicketMachineI.class).to(TicketMachineDefaultImpl.class);
 		bind(POperators.class).to(PBox.class).asEagerSingleton();
-		//bindMobsim().toProvider(PQSimProvider.class);
 
-		// TODO (PM) We can install PStats as an extra module, that's fine. But have another look at what we need and what we don't need
 		install( new PStatsModule() );
 	}
 }

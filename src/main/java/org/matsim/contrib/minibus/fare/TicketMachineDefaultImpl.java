@@ -41,11 +41,7 @@ public final class TicketMachineDefaultImpl implements TicketMachineI {
 	private final double subsidiesPerBoardingPassenger;
 	private final Collection<PVehicleSettings> pVehicleSettings;
 	private boolean isSubsidized = false;
-	private HashSet<String> subsidizedStops100;
 	private double amountOfSubsidies;
-	private HashSet<String> subsidizedStops150;
-	private HashSet<String> subsidizedStops300;
-	private HashSet<String> subsidizedStops225;
 	private HashMap<Id<TransitStopFacility>, Double> actBasedSubs;
 	
 	@Inject public TicketMachineDefaultImpl(PConfigGroup pConfig ) {
@@ -67,46 +63,6 @@ public final class TicketMachineDefaultImpl implements TicketMachineI {
             	earningsPerMeterAndPassenger = pVS.getEarningsPerKilometerAndPassenger() / 1000.;
             }
         }
-        
-		
-		// subsidy approach by manserpa: the operators get a configurable amount of subsidies after a certain number of iterations, if the passenger
-		// boards at a subsidized stop.
-		// TODO make the subsidy approach nicer, now everything is hard-coded (move everything into the config.xml)
-		
-		/*
-		if (this.subsidizedStops100.contains(stageContainer.getStopEntered().toString()) && !this.subsidizedStops150.contains(stageContainer.getStopEntered().toString())
-				&& !this.subsidizedStops225.contains(stageContainer.getStopEntered().toString()) && !this.subsidizedStops300.contains(stageContainer.getStopEntered().toString()))	{
-			this.isSubsidized  = true;
-			this.amountOfSubsidies = (int) this.subsidiesPerBoardingPassenger;
-			return earningsPerBoardingPassenger + earningsPerMeterAndPassenger * stageContainer.getDistanceTravelledInMeter() + 
-					this.subsidiesPerBoardingPassenger;
-		}
-		if (this.subsidizedStops150.contains(stageContainer.getStopEntered().toString())
-				&& !this.subsidizedStops225.contains(stageContainer.getStopEntered().toString()) && !this.subsidizedStops300.contains(stageContainer.getStopEntered().toString()))	{
-			this.isSubsidized  = true;
-			this.amountOfSubsidies = (int) this.subsidiesPerBoardingPassenger + 5;
-			return earningsPerBoardingPassenger + earningsPerMeterAndPassenger * stageContainer.getDistanceTravelledInMeter() + 
-					this.subsidiesPerBoardingPassenger + 5;
-		}
-		if (this.subsidizedStops225.contains(stageContainer.getStopEntered().toString()) && !this.subsidizedStops300.contains(stageContainer.getStopEntered().toString()))	{
-			this.isSubsidized  = true;
-			this.amountOfSubsidies = (int) this.subsidiesPerBoardingPassenger + 10;
-			return earningsPerBoardingPassenger + earningsPerMeterAndPassenger * stageContainer.getDistanceTravelledInMeter() + 
-					this.subsidiesPerBoardingPassenger + 10;
-		}
-		if (this.subsidizedStops300.contains(stageContainer.getStopEntered().toString()))	{
-			this.isSubsidized  = true;
-			this.amountOfSubsidies = (int) this.subsidiesPerBoardingPassenger + 15;
-			return earningsPerBoardingPassenger + earningsPerMeterAndPassenger * stageContainer.getDistanceTravelledInMeter() + 
-					this.subsidiesPerBoardingPassenger + 15;
-		}
-		else {
-			this.isSubsidized  = false;
-			this.amountOfSubsidies = 0;
-			*/
-			//return earningsPerBoardingPassenger + earningsPerMeterAndPassenger * stageContainer.getDistanceTravelledInMeter();
-		//}
-
 
 		/*
 		this.amountOfSubsidies = 0;
@@ -119,26 +75,6 @@ public final class TicketMachineDefaultImpl implements TicketMachineI {
 		return earningsPerBoardingPassenger + earningsPerMeterAndPassenger * stageContainer.getDistanceTravelledInMeter();
 
 		// new subsidy approach: Eine Schwierigkeit ist, dass eine Linie nur einmal am Tag Subventionen bekommt -> wie macht man das mit dem TimeProvider und dem StopProvider?
-	}
-	
-	@Override
-	public void setSubsidizedStops100(HashSet<String> subsidizedStops) {
-		this.subsidizedStops100 = subsidizedStops;
-	}
-	
-	@Override
-	public void setSubsidizedStops150(HashSet<String> subsidizedStops) {
-		this.subsidizedStops150 = subsidizedStops;
-	}
-	
-	@Override
-	public void setSubsidizedStops225(HashSet<String> subsidizedStops) {
-		this.subsidizedStops225 = subsidizedStops;
-	}
-	
-	@Override
-	public void setSubsidizedStops300(HashSet<String> subsidizedStops) {
-		this.subsidizedStops300 = subsidizedStops;
 	}
 	
 	@Override

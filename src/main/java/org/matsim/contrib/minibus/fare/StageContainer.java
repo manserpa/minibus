@@ -55,11 +55,10 @@ public final class StageContainer {
 		this.personLeavesVehE = personLeavesVehE;
 		this.vehArrivesAtFacilityELeft = vehArrivesAtFacilityE;
 	}
-	
-	
-	// TODO: set this in the config
+
+	// 10pct sample -> fare collections multiplied by 10
 	public void addDistanceTravelled(double meterTravelled){
-		this.meterTravelled  += 5 * meterTravelled;
+		this.meterTravelled  += 10 * meterTravelled;
 	}
 
 	public Id<TransitStopFacility> getStopEntered() {
@@ -87,7 +86,6 @@ public final class StageContainer {
 	}
 	
 	public Id<Vehicle> getVehicleId(){
-
 		return this.transitDriverStartsE.getVehicleId();
 	}
 	

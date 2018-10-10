@@ -97,25 +97,11 @@ public final class PBox implements POperators {
 		//this.operatorCostCollectorHandler = new OperatorCostCollectorHandler(this.pConfig.getPIdentifier(), this.pConfig.getCostPerVehicleAndDay(), this.pConfig.getCostPerKilometer() / 1000.0, this.pConfig.getCostPerHour() / 3600.0);
 		this.operatorCostCollectorHandler = new OperatorCostCollectorHandler(this.pConfig.getPIdentifier(), this.pConfig.getPVehicleSettings());
 
-		// TODO (PM) das ist ein Modul von mir -> validieren
 		this.routeOverlap = new PRouteOverlap(true, pConfig.getGridSize());
 		this.franchise = new PFranchise(this.pConfig.getUseFranchise(), pConfig.getGridSize());
 	}
 
 	void notifyStartup(StartupEvent event) {
-
-		// TODO (PM) Mein Subventionen-Ansatz -> neu ansetzen
-
-		/*
-		HashSet<String> dummyHashSet = new HashSet<>();
-		dummyHashSet.add("");
-		dummyHashSet.add("");
-		this.ticketMachine.setSubsidizedStops100(dummyHashSet);
-		this.ticketMachine.setSubsidizedStops150(dummyHashSet);
-		this.ticketMachine.setSubsidizedStops225(dummyHashSet);
-		this.ticketMachine.setSubsidizedStops300(dummyHashSet);
-		// amount of subsidies depending on  the number of activities: 0.6 .* x .* 0.12 .* exp(-0.008*x)
-		*/
 
 		/*
 		// create subsidy distribution
@@ -210,82 +196,6 @@ public final class PBox implements POperators {
 			operator.replan(this.strategyManager, event.getIteration());
 		}
 
-		/*
-		if(event.getIteration() == 101) {
-			
-			HashSet<String> allServedStopsToGrid = new HashSet<>();
-			for (Operator operator : this.operators) {				
-				for(PPlan thisPlan: operator.getAllPlans())	{
-					for(TransitStopFacility thisFacility: thisPlan.getStopsToBeServed())	{
-						String gridNodeId = GridNode.getGridNodeIdForCoord(thisFacility.getCoord(), 500);
-						allServedStopsToGrid.add(gridNodeId);
-					}
-				}
-			}
-			
-			HashSet<String> allStopsNotInALockedCell = new HashSet<>();
-			for(TransitStopFacility thisTransitStop: this.pStopsOnly.getFacilities().values())	{
-				if(!allServedStopsToGrid.contains(GridNode.getGridNodeIdForCoord(thisTransitStop.getCoord(), 500)))	{
-					allStopsNotInALockedCell.add(thisTransitStop.getId().toString());
-				}	
-			}
-		
-			
-		    BufferedWriter writer;
-			try {
-				writer = IOUtils.getBufferedWriter(event.getServices().getControlerIO().getOutputFilename("StopsToSubsidize100.csv"));
-				writer.write("StopId");
-				for(String stopsToSubs: allStopsNotInALockedCell)	{
-					writer.newLine();
-					writer.write(stopsToSubs);
-				}
-			    writer.flush();
-		        writer.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-			this.ticketMachine.setSubsidizedStops100(allStopsNotInALockedCell);
-		}
-		
-		if(event.getIteration() == 151) {
-			
-			HashSet<String> allServedStopsToGrid = new HashSet<>();
-			for (Operator operator : this.operators) {				
-				for(PPlan thisPlan: operator.getAllPlans())	{
-					for(TransitStopFacility thisFacility: thisPlan.getStopsToBeServed())	{
-						String gridNodeId = GridNode.getGridNodeIdForCoord(thisFacility.getCoord(), 500);
-						allServedStopsToGrid.add(gridNodeId);
-					}
-				}
-			}
-			
-			HashSet<String> allStopsNotInALockedCell = new HashSet<>();
-			for(TransitStopFacility thisTransitStop: this.pStopsOnly.getFacilities().values())	{
-				if(!allServedStopsToGrid.contains(GridNode.getGridNodeIdForCoord(thisTransitStop.getCoord(), 500)))	{
-					allStopsNotInALockedCell.add(thisTransitStop.getId().toString());
-				}	
-			}
-		
-			
-		    BufferedWriter writer;
-			try {
-				writer = IOUtils.getBufferedWriter(event.getServices().getControlerIO().getOutputFilename("StopsToSubsidize150.csv"));
-				writer.write("StopId");
-				for(String stopsToSubs: allStopsNotInALockedCell)	{
-					writer.newLine();
-					writer.write(stopsToSubs);
-				}
-			    writer.flush();
-		        writer.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-			this.ticketMachine.setSubsidizedStops150(allStopsNotInALockedCell);
-		}
-		*/
-
 		// Collect current lines offered
 		// why is the following done twice (see notifyScoring)?
 		this.pTransitSchedule = new TransitScheduleFactoryImpl().createTransitSchedule();
@@ -302,8 +212,6 @@ public final class PBox implements POperators {
 	}
 
 	void notifyScoring(ScoringEvent event) {
-
-
 
 		Map<Id<Vehicle>, PScoreContainer> driverId2ScoreMap = this.scorePlansHandler.getDriverId2ScoreMap();
 		for (Operator operator : this.operators) {

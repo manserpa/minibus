@@ -120,9 +120,9 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>ch.ethz.matsim.projects</groupId>
-			<artifactId>astra</artifactId>
-			<version>0.0.1-PM</version>
+			<groupId>ch.ethz.matsim</groupId>
+			<artifactId>baseline_scenario</artifactId>
+			<version>0.0.1-minibus</version>
 		</dependency>
 	</dependencies>
 </project>

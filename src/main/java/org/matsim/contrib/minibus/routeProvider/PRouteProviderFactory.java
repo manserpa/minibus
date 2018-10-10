@@ -54,21 +54,6 @@ public final class PRouteProviderFactory {
 
 		// runs the new routing
 		return new BackAndForthScheduleProvider(pStopsOnly, pConfig.getPNetwork(), randomStopProvider, randomPVehicleProvider, pConfig.getVehicleMaximumVelocity(), pConfig.getPlanningSpeedFactor(), pConfig.getDriverRestTime(), pConfig.getPIdentifier(), eventsManager, pConfig.getMode(), pConfig.getPVehicleSettings());
-		
-		/* old code by Neumann
-		 * 
-		if(pConfig.getRouteProvider().equalsIgnoreCase(SimpleBackAndForthScheduleProvider.NAME)){
-			return new SimpleBackAndForthScheduleProvider(pConfig.getPIdentifier(), pStopsOnly, network, randomStopProvider, randomPVehicleProvider, pConfig.getVehicleMaximumVelocity(), pConfig.getDriverRestTime(), pConfig.getMode());
-		} else if(pConfig.getRouteProvider().equalsIgnoreCase(SimpleCircleScheduleProvider.NAME)){
-			return new SimpleCircleScheduleProvider(pConfig.getPIdentifier(), pStopsOnly, network, randomStopProvider, randomPVehicleProvider, pConfig.getVehicleMaximumVelocity(), pConfig.getDriverRestTime(), pConfig.getMode());
-		} else if(pConfig.getRouteProvider().equalsIgnoreCase(ComplexCircleScheduleProvider.NAME)){
-			return new ComplexCircleScheduleProvider(pStopsOnly, network, randomStopProvider, randomPVehicleProvider, pConfig.getVehicleMaximumVelocity(), pConfig.getPlanningSpeedFactor(), pConfig.getDriverRestTime(), pConfig.getMode());
-		} else if(pConfig.getRouteProvider().equalsIgnoreCase(TimeAwareComplexCircleScheduleProvider.NAME)){
-			return new TimeAwareComplexCircleScheduleProvider(pStopsOnly, network, randomStopProvider, randomPVehicleProvider, pConfig.getVehicleMaximumVelocity(), pConfig.getPlanningSpeedFactor(), pConfig.getDriverRestTime(), pConfig.getPIdentifier(), eventsManager, pConfig.getMode(), pConfig.getPVehicleSettings());
-		} else {
-			log.error("There is no route provider specified. " + pConfig.getRouteProvider() + " unknown");
-			return null;
-		}
-		*/
+
 	}
 }

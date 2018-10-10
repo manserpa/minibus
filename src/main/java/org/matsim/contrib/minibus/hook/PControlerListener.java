@@ -90,9 +90,6 @@ final class PControlerListener implements IterationStartsListener, StartupListen
 			addPVehiclesToOriginalOnes(event.getServices().getScenario().getTransitVehicles(), this.pVehiclesFactory.createVehicles(pBox.getpTransitSchedule()));
 
 			this.pTransitRouterFactory.updateTransitSchedule();
-			// TODO (PM) I think this can be removed in the long term
-			//if((event.getIteration() + 1) % 2 == 0 && event.getIteration() <= 250)
-				//new PseudoReplanning(controler, event.getIteration());
 		}
 		this.dumpTransitScheduleAndVehicles(event.getServices(), event.getIteration());
 	}
