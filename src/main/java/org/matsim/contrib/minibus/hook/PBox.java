@@ -20,12 +20,16 @@
 package org.matsim.contrib.minibus.hook;
 
 import org.apache.log4j.Logger;
+import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.TransportMode;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.network.Node;
+import org.matsim.api.core.v01.population.Activity;
+import org.matsim.api.core.v01.population.Person;
+import org.matsim.api.core.v01.population.PlanElement;
 import org.matsim.contrib.minibus.PConfigGroup;
 import org.matsim.contrib.minibus.PConstants.OperatorState;
 import org.matsim.contrib.minibus.fare.StageContainerCreator;
@@ -102,36 +106,6 @@ public final class PBox implements POperators {
 	}
 
 	void notifyStartup(StartupEvent event) {
-
-		/*
-		// create subsidy distribution
-		HashMap<String, Integer> gridNodeId2ActsCountMap = new HashMap<>();
-		for (Person person : event.getServices().getScenario().getPopulation().getPersons().values()) {
-			for (PlanElement pE : person.getSelectedPlan().getPlanElements()) {
-				if (pE instanceof Activity) {
-					Activity act = (Activity) pE;
-					String gridNodeId = GridNode.getGridNodeIdForCoord(act.getCoord(), pConfig.getGridSize());
-					if (gridNodeId2ActsCountMap.get(gridNodeId) == null) {
-						gridNodeId2ActsCountMap.put(gridNodeId, 0);
-					}
-					gridNodeId2ActsCountMap.put(gridNodeId, gridNodeId2ActsCountMap.get(gridNodeId) + 1);
-				}
-			}
-		}
-
-		HashMap<Id<TransitStopFacility>, Double> actBasedSub = new HashMap<>();
-		for(TransitStopFacility fac: this.pStopsOnly.getFacilities().values())	{
-			String gridNodeId = GridNode.getGridNodeIdForCoord(fac.getCoord(), pConfig.getGridSize());
-			double subsidies = 0.0;
-			if(gridNodeId2ActsCountMap.get(gridNodeId) != null) 	{
-				subsidies = 0.6 * gridNodeId2ActsCountMap.get(gridNodeId) * 0.12 * Math.exp(-0.008 * gridNodeId2ActsCountMap.get(gridNodeId));
-			}
-			actBasedSub.put(fac.getId(), subsidies);
-		}
-
-		this.ticketMachine.setActBasedSubs(actBasedSub);
-		*/
-
 		TimeProvider timeProvider = new TimeProvider(this.pConfig, event.getServices().getControlerIO().getOutputPath());
 		event.getServices().getEvents().addHandler(timeProvider);
 		
@@ -178,6 +152,46 @@ public final class PBox implements POperators {
 		for (Operator operator : this.operators) {
 			this.pTransitSchedule.addTransitLine(operator.getCurrentTransitLine());
 		}
+
+		// create subsidy distribution
+		HashMap<Id<TransitStopFacility>, Double> actBasedSub = new HashMap<>();
+		if(this.pConfig.getUseSubsidyApproach()) {
+			HashMap<Coord, Integer> nbActivities = new HashMap<>();
+			HashMap<TransitStopFacility, Integer> nbActivitiesAroundStop = new HashMap<>();
+			for (Person person : event.getServices().getScenario().getPopulation().getPersons().values()) {
+				for (PlanElement pE : person.getSelectedPlan().getPlanElements()) {
+					if (pE instanceof Activity) {
+						Activity act = (Activity) pE;
+						if (!act.getType().equals("pt interaction") && !act.getType().equals("outside")) {
+							nbActivities.putIfAbsent(act.getCoord(), 0);
+							nbActivities.put(act.getCoord(), nbActivities.get(act.getCoord()) + 1);
+						}
+					}
+				}
+			}
+
+			for (TransitStopFacility stop : this.pStopsOnly.getFacilities().values()) {
+				nbActivitiesAroundStop.putIfAbsent(stop, 0);
+				for (Coord actCoord : nbActivities.keySet()) {
+					if (NetworkUtils.getEuclideanDistance(actCoord, stop.getCoord()) < 500) {
+						int nbActs = nbActivities.get(actCoord);
+						nbActivitiesAroundStop.put(stop, nbActivitiesAroundStop.get(stop) + nbActs);
+					}
+				}
+			}
+
+			int counter = 0;
+			for(TransitStopFacility stop: nbActivitiesAroundStop.keySet())	{
+				double subsidies = 30 - (0.5 * Math.pow(2,(nbActivitiesAroundStop.get(stop)*0.004)));
+				if(subsidies > 0.0)	{
+					counter++;
+					actBasedSub.put(stop.getId(), subsidies);
+				}
+			}
+			log.info("number of subsidized stops: " + counter);
+		}
+
+		this.ticketMachine.setActBasedSubs(actBasedSub);
 
 		// Reset the franchise system - TODO necessary?
 		this.franchise.reset(this.operators);

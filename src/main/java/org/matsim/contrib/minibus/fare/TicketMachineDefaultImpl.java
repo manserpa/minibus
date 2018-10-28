@@ -37,8 +37,7 @@ import org.matsim.pt.transitSchedule.api.TransitStopFacility;
  *
  */
 public final class TicketMachineDefaultImpl implements TicketMachineI {
-	
-	private final double subsidiesPerBoardingPassenger;
+
 	private final Collection<PVehicleSettings> pVehicleSettings;
 	private boolean isSubsidized = false;
 	private double amountOfSubsidies;
@@ -46,7 +45,6 @@ public final class TicketMachineDefaultImpl implements TicketMachineI {
 	
 	@Inject public TicketMachineDefaultImpl(PConfigGroup pConfig ) {
 		this.pVehicleSettings = pConfig.getPVehicleSettings();
-		this.subsidiesPerBoardingPassenger = pConfig.getSubsidiesPerBoardingPassenger();
 	}
 	
 	@Override
@@ -54,8 +52,6 @@ public final class TicketMachineDefaultImpl implements TicketMachineI {
 		
 		double earningsPerBoardingPassenger = 0.0;
 		double earningsPerMeterAndPassenger = 0.0;
-	
-		// manserpa: earnings could be set differently for the different vehicle types
 		
 		for (PVehicleSettings pVS : this.pVehicleSettings) {
             if (stageContainer.getVehicleId().toString().contains(pVS.getPVehicleName())) {
@@ -64,17 +60,17 @@ public final class TicketMachineDefaultImpl implements TicketMachineI {
             }
         }
 
-		/*
-		this.amountOfSubsidies = 0;
 		if (this.actBasedSubs.containsKey(stageContainer.getStopEntered()))	{
 			this.isSubsidized  = true;
 			this.amountOfSubsidies = this.actBasedSubs.get(stageContainer.getStopEntered());
 		}
-		*/
+		else	{
+			this.amountOfSubsidies = 0;
+			this.isSubsidized = false;
+		}
 
-		return earningsPerBoardingPassenger + earningsPerMeterAndPassenger * stageContainer.getDistanceTravelledInMeter();
-
-		// new subsidy approach: Eine Schwierigkeit ist, dass eine Linie nur einmal am Tag Subventionen bekommt -> wie macht man das mit dem TimeProvider und dem StopProvider?
+		return earningsPerBoardingPassenger + this.amountOfSubsidies +
+				earningsPerMeterAndPassenger * stageContainer.getDistanceTravelledInMeter();
 	}
 	
 	@Override
