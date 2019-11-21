@@ -157,7 +157,7 @@ public final class PBox implements POperators {
 		HashMap<Id<TransitStopFacility>, Double> actBasedSub = new HashMap<>();
 		if(this.pConfig.getUseSubsidyApproach()) {
 			HashMap<Coord, Integer> nbActivities = new HashMap<>();
-			HashMap<TransitStopFacility, Integer> nbActivitiesAroundStop = new HashMap<>();
+			HashMap<TransitStopFacility, List<Integer>> nbActivitiesAroundStop = new HashMap<>();
 			for (Person person : event.getServices().getScenario().getPopulation().getPersons().values()) {
 				for (PlanElement pE : person.getSelectedPlan().getPlanElements()) {
 					if (pE instanceof Activity) {
@@ -171,18 +171,23 @@ public final class PBox implements POperators {
 			}
 
 			for (TransitStopFacility stop : this.pStopsOnly.getFacilities().values()) {
-				nbActivitiesAroundStop.putIfAbsent(stop, 0);
+				nbActivitiesAroundStop.putIfAbsent(stop, new ArrayList<>(Arrays.asList(0,0)));
 				for (Coord actCoord : nbActivities.keySet()) {
-					if (NetworkUtils.getEuclideanDistance(actCoord, stop.getCoord()) < 500) {
+					if(NetworkUtils.getEuclideanDistance(actCoord, stop.getCoord()) < 500)  {
 						int nbActs = nbActivities.get(actCoord);
-						nbActivitiesAroundStop.put(stop, nbActivitiesAroundStop.get(stop) + nbActs);
+						nbActivitiesAroundStop.get(stop).set(0, nbActivitiesAroundStop.get(stop).get(0) + nbActs);
+					}
+					if(NetworkUtils.getEuclideanDistance(actCoord, stop.getCoord()) < 3000)  {
+						int nbActs = nbActivities.get(actCoord);
+						nbActivitiesAroundStop.get(stop).set(1, nbActivitiesAroundStop.get(stop).get(1) + nbActs);
 					}
 				}
 			}
 
 			int counter = 0;
 			for(TransitStopFacility stop: nbActivitiesAroundStop.keySet())	{
-				double subsidies = 30 - (0.5 * Math.pow(2,(nbActivitiesAroundStop.get(stop)*0.004)));
+				double activities = nbActivitiesAroundStop.get(stop).get(0) + (0.1 * nbActivitiesAroundStop.get(stop).get(1));
+				double subsidies = 60 - ( 0.5 * Math.pow(2, (activities * 0.0021) ) );
 				if(subsidies > 0.0)	{
 					counter++;
 					actBasedSub.put(stop.getId(), subsidies);

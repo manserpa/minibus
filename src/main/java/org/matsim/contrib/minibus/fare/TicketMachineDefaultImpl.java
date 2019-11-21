@@ -28,6 +28,7 @@ import javax.inject.Inject;
 import org.matsim.api.core.v01.Id;
 import org.matsim.contrib.minibus.PConfigGroup;
 import org.matsim.contrib.minibus.PConfigGroup.PVehicleSettings;
+import org.matsim.core.network.io.NetworkWriter;
 import org.matsim.pt.transitSchedule.api.TransitStopFacility;
 
 /**

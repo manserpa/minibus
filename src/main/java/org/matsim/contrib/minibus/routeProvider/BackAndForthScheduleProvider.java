@@ -368,7 +368,7 @@ final class BackAndForthScheduleProvider implements PRouteProvider{
 	}
 	
 	public int getMinStopTime(double capacity){
-		int minStopTime = (int) (0.2 * capacity + 10);
+		int minStopTime = (int) (0.2 * capacity);
 		return minStopTime;
 	}
 
