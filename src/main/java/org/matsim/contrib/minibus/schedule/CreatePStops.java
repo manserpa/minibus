@@ -47,6 +47,10 @@ import java.util.*;
  * Create one TransitStopFacility for each car mode link of the network
  * 
  * @author aneumann, droeder, manserpa
+ * adaptions made by manserpa (unfortunately, not very clean code):
+ *  - generating stops in a way that they allow for a back- and forth routing approach
+ *  - each road link-pair (same from and to-node) on links with free speed smaller than 27m/s are considered a possible stop location
+ *  - it generates a network which is used for public transport routing only
  *
  */
 public final class CreatePStops{
@@ -73,6 +77,7 @@ public final class CreatePStops{
 
 	public static TransitSchedule createPStops(Network network, PConfigGroup pConfigGroup, TransitSchedule realTransitSchedule) {
 		CreatePStops cS = new CreatePStops(network, pConfigGroup, realTransitSchedule);
+		// this
 		cS.run();
 		new NetworkWriter(pConfigGroup.getPNetwork()).write("pNetwork.xml.gz");
 		new NetworkWriter(network).write("totNetwork.xml.gz");
