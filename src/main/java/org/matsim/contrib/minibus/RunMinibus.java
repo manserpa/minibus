@@ -33,7 +33,7 @@ import java.util.Random;
 
 /**
  * 
- * @author manserpa
+ * @author manserpa based on original contrib written by aneumann
  */
 
 public final class RunMinibus {
