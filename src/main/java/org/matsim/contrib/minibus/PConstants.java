@@ -24,6 +24,8 @@ import org.matsim.contrib.minibus.operator.PPlan;
 
 /**
  * @author aneumann
+ * extended by manserpa: vehicle types
+ *
  */
 
 public final class PConstants {
@@ -34,6 +36,10 @@ public final class PConstants {
 	
 	public enum OperatorState {
 	    PROSPECTING, INBUSINESS, BANKRUPT
+	}
+
+	public enum VehicleTypes {
+		ARTICULATED, STANDARD, MINI
 	}
 	
 	private PConstants() {

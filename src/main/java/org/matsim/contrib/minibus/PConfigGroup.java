@@ -39,6 +39,10 @@ import org.matsim.vehicles.VehicleType.DoorOperationMode;
  * Config group to configure minibus
  * 
  * @author aneumann
+ * Several changes made by manserpa:
+ *  - subsidy approach
+ *  - vehicle types (cost structures, capacities, ...)
+ *  - different handling of vehicle speed
  *
  */
 

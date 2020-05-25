@@ -21,16 +21,19 @@ package org.matsim.contrib.minibus;
 
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Scenario;
+import org.matsim.contrib.minibus.agentReRouting.PReRoutingStrategy;
 import org.matsim.contrib.minibus.hook.PModule;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
+import org.matsim.core.controler.AbstractModule;
 import org.matsim.core.controler.Controler;
 import org.matsim.core.scenario.ScenarioUtils;
 
+import java.util.Random;
+
 /**
- * Entry point, registers all necessary hooks
  * 
- * @author aneumann
+ * @author manserpa
  */
 
 public final class RunMinibus {
@@ -43,9 +46,20 @@ public final class RunMinibus {
 		Scenario scenario = ScenarioUtils.loadScenario(config);
 
 		Controler controler = new Controler(scenario);
-		controler.getConfig().controler().setCreateGraphs(false);
 
-		controler.addOverridingModule(new PModule()) ;
+		controler.addOverridingModule(new PModule());
+
+		// add custom routing strategy
+		controler.addOverridingModule(new AbstractModule() {
+			@Override
+			public void install() {
+				addPlanStrategyBinding("PReRoute").toProvider(PReRoutingStrategy.class);
+			}
+		});
+
+		// if desired, add subsidy approach here
+		PConfigGroup pConfig = ConfigUtils.addOrGetModule(config, PConfigGroup.class);
+		pConfig.setUseSubsidyApproach(false);
 
 		controler.run();
 	}		
