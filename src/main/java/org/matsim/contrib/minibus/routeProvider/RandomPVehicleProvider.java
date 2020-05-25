@@ -8,6 +8,11 @@ import org.matsim.contrib.minibus.PConfigGroup;
 import org.matsim.contrib.minibus.PConfigGroup.PVehicleSettings;
 import org.matsim.core.gbl.MatsimRandom;
 
+/**
+ *
+ * @author manserpa: returns a random vehicle type
+ *
+ */
 public class RandomPVehicleProvider {
 	
 	//private final static Logger log = Logger.getLogger(RandomPVehicleProvider.class);

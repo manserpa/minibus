@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 /**
- * @author aneumann
+ * @author aneumann, not used in this repository
  */
 final class TimeAwareComplexCircleScheduleProviderHandler implements TransitDriverStartsEventHandler, VehicleArrivesAtFacilityEventHandler{
 

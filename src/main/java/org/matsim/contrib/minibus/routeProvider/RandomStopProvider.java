@@ -45,7 +45,8 @@ import java.util.Map.Entry;
 /**
  * Provides random draws of transit stops facilities. The draw is weighted by the number of activities within the stops proximity.
  * 
- * @author aneumann
+ * @author aneumann, extended by manserpa:
+ *  - artificially reduce the number of stops returned by the provider (more information in P. Manser, 2017)
  *
  */
 final class RandomStopProvider {
@@ -97,17 +98,6 @@ final class RandomStopProvider {
 		}
 		
 		this.sortedGridNodeId2ActsCountMap = new ArrayList<>();
-		/*
-		for(String e : this.gridNodeId2ActsCountMap.keySet())	{
-			sortedGridNodeId2ActsCountMap.add(this.gridNodeId2ActsCountMap.get(e));
-		}
-		
-		Collections.sort(sortedGridNodeId2ActsCountMap);
-		
-		int percentile95 = (int) (0.95 * sortedGridNodeId2ActsCountMap.size());
-		
-		this.thresholdActivitiesInGrid = sortedGridNodeId2ActsCountMap.get(percentile95);
-		*/
 		
 		// sort facilities for all grid nodes
 		LinkedHashMap<String, List<TransitStopFacility>> gridNodeId2StopsMap = new LinkedHashMap<>();
@@ -127,8 +117,7 @@ final class RandomStopProvider {
 		int percentile60 = (int) (0.25 * this.sortedGridNodeId2ActsCountMap.size());
 		
 		this.thresholdActivitiesInGrid = this.sortedGridNodeId2ActsCountMap.get(percentile60);
-		
-		
+
 		
 		// associate the number of acts per grid node with the corresponding transit stop facilities
 		for (Entry<String, List<TransitStopFacility>> stopsEntry : gridNodeId2StopsMap.entrySet()) {
@@ -266,14 +255,6 @@ final class RandomStopProvider {
 				this.outputDir = this.outputDir + PConstants.statsOutputFolder + RandomStopProvider.class.getSimpleName() + "/";
 				new File(this.outputDir).mkdir();
 			}
-			
-			/*
-			BufferedWriter writer = IOUtils.getBufferedWriter(outputDir + currentIteration + ".stopId2stopWeight.txt.gz");
-			writer.write("# stop id; x; y; weight"); writer.newLine();
-			for (Entry<TransitStopFacility, Double> stopEntry : this.stops2Weight.entrySet()) {
-				writer.write(stopEntry.getKey().getId().toString() + "; " + stopEntry.getKey().getCoord().getX() + "; " + stopEntry.getKey().getCoord().getY() + "; " + stopEntry.getValue().toString()); writer.newLine();
-			}			
-			*/
 			
 			BufferedWriter writer = IOUtils.getBufferedWriter(outputDir + currentIteration + ".activitiesInGrid.txt.gz");
 			writer.write("activities; 85percentile"); writer.newLine();

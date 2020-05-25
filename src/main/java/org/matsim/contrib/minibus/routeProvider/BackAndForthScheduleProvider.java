@@ -40,6 +40,8 @@ import org.matsim.vehicles.Vehicle;
 /**
  * Back-And-Forth route provider. Purpose: creates to routes for each plan -> one for the route forth and one
  * for the route back
+ * The algorithm has been tested and applied for the Zurich scenario. However, we expect that changes are necessary
+ * to run it in a different scenario
  *  
  * @author manserpa
  *
@@ -74,10 +76,7 @@ final class BackAndForthScheduleProvider implements PRouteProvider{
 		this.randomPVehicleProvider = randomPVehicleProvider;
 		this.scheduleWithStopsOnly = scheduleWithStopsOnly;
 		
-		
-		// ----------------------------------------------------------
-		//TODO (manserpa) adapt the disutilities according to the config
-		// ----------------------------------------------------------
+
 		FreespeedTravelTimeAndDisutility tC = new FreespeedTravelTimeAndDisutility(-6.0, 0.0, 0.0); // Here, it may make sense to use the variable cost parameters given in the config. Ihab/Daniel may'14
 		this.routingAlgo = new DijkstraFactory().createPathCalculator(this.net, tC, tC);
 		@SuppressWarnings("serial")
@@ -198,7 +197,8 @@ final class BackAndForthScheduleProvider implements PRouteProvider{
 		// and puts these gridIds into a HashSet
 		for (TransitStopFacility transitStopFacility : stopsToBeServed) {
 			tempStopsToBeServed.add(transitStopFacility);
-			
+
+			// TODO: hard-coded
 			String gridNodeId = GridNode.getGridNodeIdForCoord(transitStopFacility.getCoord(), 300);
 			gridStopHashSet.add(gridNodeId);
 		}
@@ -301,7 +301,6 @@ final class BackAndForthScheduleProvider implements PRouteProvider{
 				
 			}
 			// now this thing provides information about stops passed by anyway
-			// TODO manserpa look at the code
 			
 			else if(routePattern.equals("back"))	{
 				
@@ -342,7 +341,6 @@ final class BackAndForthScheduleProvider implements PRouteProvider{
 		}
 		
 		// last stop
-		// manserpa: I think this is not necessary anymore
 		
 		runningTime += (this.net.getLinks().get(tempStopsToBeServed.get(tempStopsToBeServed.size()-1).getLinkId()).getLength() / (Math.min(this.vehicleMaximumVelocity, this.net.getLinks().get(tempStopsToBeServed.get(tempStopsToBeServed.size()-1).getLinkId()).getFreespeed()) * this.planningSpeedFactor));
 
@@ -368,6 +366,7 @@ final class BackAndForthScheduleProvider implements PRouteProvider{
 	}
 	
 	public int getMinStopTime(double capacity){
+		// TODO: add more flexibility
 		int minStopTime = (int) (0.2 * capacity);
 		return minStopTime;
 	}

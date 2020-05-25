@@ -44,9 +44,8 @@ import java.util.*;
 import java.util.Map.Entry;
 
 /**
- * Same as {@link ComplexCircleScheduleProvider}, but sets travel times according to the realized travel times of the last iteration.
- * 
- * @author aneumann
+ *
+ * @author aneumann, not used in this repository
  *
  */
 final class TimeAwareComplexCircleScheduleProvider implements PRouteProvider{

@@ -38,7 +38,9 @@ import java.util.Set;
 
 /**
  * 
- * @author aneumann
+ * @author aneumann, adapted by manserpa:
+ *  - vehicle provider
+ *  - routing approach
  *
  */
 public final class PRouteProviderFactory {
@@ -49,10 +51,11 @@ public final class PRouteProviderFactory {
 	public static PRouteProvider createRouteProvider(Config config, Population population, PConfigGroup pConfig, TransitSchedule pStopsOnly, String outputDir, EventsManager eventsManager) {
 
 		RandomStopProvider randomStopProvider = new RandomStopProvider(pConfig, population, pStopsOnly, outputDir);
-		
+
+		// new approach to allow for different vehicle types
 		RandomPVehicleProvider randomPVehicleProvider = new RandomPVehicleProvider(pConfig);
 
-		// runs the new routing
+		// in this case, we allow for one possible routing algorithm only
 		return new BackAndForthScheduleProvider(pStopsOnly, pConfig.getPNetwork(), randomStopProvider, randomPVehicleProvider, pConfig.getVehicleMaximumVelocity(), pConfig.getPlanningSpeedFactor(), pConfig.getDriverRestTime(), pConfig.getPIdentifier(), eventsManager, pConfig.getMode(), pConfig.getPVehicleSettings());
 
 	}
