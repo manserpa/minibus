@@ -52,7 +52,7 @@ import java.util.*;
  * Chooses then randomly a new stop within the buffer and inserts it in both directions of the line.
  * This is done assuming the most distant stops to be the termini.
  * 
- * @author aneumann
+ * @author aneumann, modified and extended by manserpa
  *
  */
 public final class SidewaysRouteExtensionBF extends AbstractPStrategyModule {

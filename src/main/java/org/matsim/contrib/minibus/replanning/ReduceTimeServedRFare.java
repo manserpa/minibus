@@ -40,7 +40,8 @@ import java.util.Map.Entry;
  * Restricts the time of operation to temporal relations higher than a certain threshold.
  * Threshold is standard deviation of number of trips or collected fare of all relations twice a scaling factor.
  * 
- * @author aneumann
+ * @author aneumann, modified by manserpa:
+ *  - allows the usage of the new routing algorithm
  *
  */
 public final class ReduceTimeServedRFare extends AbstractPStrategyModule implements StageContainerHandler{

@@ -42,7 +42,7 @@ import java.util.TreeSet;
  * Removes all stops belonging to a demand relation with trips below a certain threshold.
  * Threshold is standard deviation of number of trips or collected fare of all relations twice a scaling factor.
  * 
- * @author aneumann
+ * @author aneumann, modified and extended by manserpa
  *
  */
 public final class ReduceStopsToBeServedRFareBF extends AbstractPStrategyModule implements StageContainerHandler{

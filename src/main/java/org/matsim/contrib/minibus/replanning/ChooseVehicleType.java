@@ -18,7 +18,12 @@ import org.matsim.core.utils.io.UncheckedIOException;
 import org.matsim.pt.transitSchedule.api.TransitLine;
 import org.matsim.pt.transitSchedule.api.TransitRoute;
 
-
+/**
+ * Provide a new vehicle type. This is calibrated to the vehicle sizes used in the Zurich application.
+ * See Manser, P. (2017) for more information.
+ *
+ * @author manserpa
+ */
 public final class ChooseVehicleType extends AbstractPStrategyModule {
 	
 	private final static Logger log = Logger.getLogger(ChooseVehicleType.class);

@@ -36,6 +36,8 @@ import java.util.ArrayList;
  * 
  * @author aneumann
  *
+ * An overview of the strategies used in the Zurich application can be found in Manser et al (2020)
+ *
  */
 public final class PStrategyManager {
 	

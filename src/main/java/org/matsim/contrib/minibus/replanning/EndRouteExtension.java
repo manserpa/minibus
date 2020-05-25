@@ -44,7 +44,7 @@ import java.util.*;
  * Excludes the part of the buffer going parallel/along the actual route, so only the end caps remain.
  * Chooses then randomly a new stop within the buffer and inserts it after the nearest existing stop.
  * 
- * @author aneumann
+ * @author aneumann, here not used anymore
  *
  */
 public final class EndRouteExtension extends AbstractPStrategyModule {
