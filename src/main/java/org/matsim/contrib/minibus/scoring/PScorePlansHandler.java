@@ -57,7 +57,6 @@ public final class PScorePlansHandler implements StageContainerHandler, Operator
 			this.vehicleId2ScoreMap.put(fareContainer.getVehicleId(), new PScoreContainer(fareContainer.getVehicleId(), this.ticketMachine));
 		}
 
-		// TODO debugging, got a single null pointer here?! 
 		try {
 			this.vehicleId2ScoreMap.get(fareContainer.getVehicleId()).handleStageContainer(fareContainer);
 		} catch (Exception e) {
@@ -79,19 +78,6 @@ public final class PScorePlansHandler implements StageContainerHandler, Operator
 			this.vehicleId2ScoreMap.get(operatorCostContainer.getVehicleId()).handleOperatorCostContainer(operatorCostContainer);
 		else
 			log.warn("Vehicle with ID " + operatorCostContainer.getVehicleId().toString() + " is stuck.");
-
-		/*
-		// TODO debugging, got a single null pointer here?! 
-		try {
-			this.vehicleId2ScoreMap.get(operatorCostContainer.getVehicleId()).handleOperatorCostContainer(operatorCostContainer);
-		} catch (Exception e) {
-			log.warn("Got a null pointer here...");
-			log.warn(e.getMessage());
-			log.warn("CostContainer " + operatorCostContainer);
-			log.warn("vehicleMap " + this.vehicleId2ScoreMap);
-			e.printStackTrace();
-		}
-		*/
 			
 	}
 

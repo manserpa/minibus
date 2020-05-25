@@ -28,7 +28,8 @@ import org.matsim.vehicles.Vehicle;
 /**
  * Simple container class collecting all incomes and expenses for one single vehicle.
  * 
- * @author aneumann
+ * @author aneumann extended by manserpa:
+ *  - incorporated a subsidy approach
  *
  */
 public final class PScoreContainer {

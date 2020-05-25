@@ -42,7 +42,8 @@ import java.util.List;
  * 
  * Collects all information needed to calculate the fare.
  * 
- * @author aneumann
+ * @author aneumann extended by manserpa:
+ *  - different cost structures for specific vehicle types
  *
  */
 public final class OperatorCostCollectorHandler implements TransitDriverStartsEventHandler, LinkEnterEventHandler,
@@ -52,24 +53,16 @@ public final class OperatorCostCollectorHandler implements TransitDriverStartsEv
 	
 	private Network network;
 	private final String pIdentifier;
-	//private final double costPerVehicleAndDay;
-	//private final double expensesPerMeter;
-	//private final double expensesPerSecond;
-	
+
 	private final List<OperatorCostContainerHandler> operatorCostContainerHandlerList = new LinkedList<>();
 	private HashMap<Id<Vehicle>, OperatorCostContainer> vehId2OperatorCostContainer = new HashMap<>();
 	
 	// in the new code, the vehicle costs are depending on the vehicle type
 	private Collection<PVehicleSettings> pVehicleSettings;
-	
-	//public OperatorCostCollectorHandler(String pIdentifier, double costPerVehicleAndDay, double expensesPerMeter, double expensesPerSecond){
+
 	public OperatorCostCollectorHandler(String pIdentifier, Collection<PVehicleSettings> pVehicleSettings){
 		this.pIdentifier = pIdentifier;
 		this.pVehicleSettings = pVehicleSettings;
-		//this.costPerVehicleAndDay = costPerVehicleAndDay;
-		//this.expensesPerMeter = expensesPerMeter;
-		//this.expensesPerSecond = expensesPerSecond;
-		log.info("enabled");
 	}
 	
 	public void init(Network network){
