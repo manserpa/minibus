@@ -35,7 +35,7 @@ import org.matsim.vehicles.VehicleReaderV1;
 /**
  * Merges all routes of a transit line that have the same sequence of stops. Does not respect the time profile of the routes.
  * 
- * @author aneumann
+ * @author aneumann, copied from original contribution
  *
  */
 public class PTransitLineMerger {
