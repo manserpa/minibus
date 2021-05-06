@@ -19,29 +19,28 @@
 
 package org.matsim.contrib.minibus;
 
+import ch.sbb.matsim.mobsim.qsim.SBBTransitModule;
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Scenario;
-import org.matsim.api.core.v01.population.*;
+import org.matsim.api.core.v01.population.Activity;
+import org.matsim.api.core.v01.population.Person;
+import org.matsim.api.core.v01.population.Plan;
+import org.matsim.api.core.v01.population.PlanElement;
 import org.matsim.contrib.minibus.agentReRouting.PReRoutingStrategy;
 import org.matsim.contrib.minibus.hook.PModule;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
-import org.matsim.core.config.groups.PlanCalcScoreConfigGroup;
 import org.matsim.core.controler.AbstractModule;
 import org.matsim.core.controler.Controler;
-import org.matsim.core.population.PopulationUtils;
 import org.matsim.core.population.algorithms.TripsToLegsAlgorithm;
 import org.matsim.core.router.MainModeIdentifier;
 import org.matsim.core.router.MainModeIdentifierImpl;
-import org.matsim.core.router.TripStructureUtils;
 import org.matsim.core.scenario.ScenarioUtils;
-import org.matsim.core.scoring.SumScoringFunction;
-import org.matsim.core.scoring.functions.*;
 import org.matsim.pt.PtConstants;
+import org.matsim.pt.transitSchedule.api.TransitLine;
+import org.matsim.pt.transitSchedule.api.TransitRoute;
 
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * 
@@ -56,8 +55,6 @@ public final class RunMinibus {
 		Config config = ConfigUtils.loadConfig( args[0], new PConfigGroup() ) ;
 
 		Scenario scenario = ScenarioUtils.createScenario(config);
-		//scenario.getPopulation().getFactory().getRouteFactories().setRouteFactory(DefaultEnrichedTransitRoute.class,
-		//		new DefaultEnrichedTransitRouteFactory());
 		ScenarioUtils.loadScenario(scenario);
 
 		MainModeIdentifier mainModeIdentifier = new MainModeIdentifierImpl();
@@ -65,24 +62,25 @@ public final class RunMinibus {
 		for (Person person: scenario.getPopulation().getPersons().values())	{
 			Plan plan = person.getSelectedPlan();
 			algorithm.run(plan);
-			
+			for (PlanElement element : plan.getPlanElements()) {
+				if (element instanceof Activity) {
+					Activity activity = (Activity) element;
+					if (!Collections.singleton(PtConstants.TRANSIT_ACTIVITY_TYPE).contains(activity.getType())) {
+						activity.setType("dummy");
+					}
+				}
+			}
 		}
 
-		/*
 		for(TransitLine line: scenario.getTransitSchedule().getTransitLines().values()) {
 			for (TransitRoute route : line.getRoutes().values()) {
 				route.setTransportMode("detPt");
 			}
 		}
-		*/
 
 		Controler controler = new Controler(scenario);
 
-		// controler.addOverridingModule(new BaselineModule());
-		// controler.addOverridingModule(new BaselineTransitModule());
-		// controler.addOverridingModule(new BaselineTrafficModule(3.0));
-		// controler.addOverridingModule(new ZurichModule());
-		// controler.addOverridingModule(new CustomModeChoiceModule(cmd));
+		controler.addOverridingModule(new SBBTransitModule());
 
 		controler.addOverridingModule(new PModule());
 		controler.addOverridingModule(new AbstractModule() {

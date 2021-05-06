@@ -111,6 +111,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.matsim.contrib</groupId>
+			<artifactId>sbb-extensions</artifactId>
+			<version>${matsim.version}</version>
+		</dependency>
+
+		<dependency>
 			<groupId>com.vividsolutions</groupId>
 			<artifactId>jts</artifactId>
 			<version>RELEASE</version>
