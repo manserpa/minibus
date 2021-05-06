@@ -30,7 +30,7 @@ import org.matsim.core.scenario.ScenarioUtils;
 import org.matsim.pt.transitSchedule.TransitScheduleFactoryImpl;
 import org.matsim.pt.transitSchedule.TransitScheduleReaderV1;
 import org.matsim.pt.transitSchedule.api.*;
-import org.matsim.vehicles.VehicleReaderV1;
+import org.matsim.vehicles.MatsimVehicleReader;
 
 /**
  * Merges all routes of a transit line that have the same sequence of stops. Does not respect the time profile of the routes.
@@ -165,7 +165,7 @@ public class PTransitLineMerger {
 		MatsimNetworkReader networkReader = new MatsimNetworkReader(scenario.getNetwork());
 		networkReader.readFile(networkFile);
 		
-		VehicleReaderV1 vehicleReader = new VehicleReaderV1(scenario.getTransitVehicles());
+		MatsimVehicleReader vehicleReader = new MatsimVehicleReader(scenario.getTransitVehicles());
 		vehicleReader.readFile(vehicleFile);
 		TransitScheduleReaderV1 scheduleReader = new TransitScheduleReaderV1(scenario);
 		scheduleReader.readFile(transitScheduleInFile);

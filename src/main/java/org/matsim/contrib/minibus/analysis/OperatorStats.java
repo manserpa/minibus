@@ -4,11 +4,13 @@ import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.core.config.ConfigUtils;
-import org.matsim.core.network.io.NetworkReaderMatsimV2;
+import org.matsim.core.network.io.MatsimNetworkReader;
 import org.matsim.core.scenario.ScenarioUtils;
-import org.matsim.pt.transitSchedule.api.*;
+import org.matsim.pt.transitSchedule.api.TransitLine;
+import org.matsim.pt.transitSchedule.api.TransitRoute;
+import org.matsim.pt.transitSchedule.api.TransitScheduleReader;
+import org.matsim.pt.transitSchedule.api.TransitStopFacility;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,7 +20,7 @@ public class OperatorStats {
         Set<Id<TransitStopFacility>> stopIds = new HashSet<>();
 
         Scenario scenario = ScenarioUtils.createScenario(ConfigUtils.createConfig());
-        new NetworkReaderMatsimV2(scenario.getNetwork()).readFile(args[0]);
+        new MatsimNetworkReader(scenario.getNetwork()).readFile(args[0]);
         new TransitScheduleReader(scenario).readFile(args[1]);
 
         // reference case
@@ -57,8 +59,8 @@ public class OperatorStats {
                         vehKM += scenario.getNetwork().getLinks().get(link).getLength() / 1000;
                     }
                     double vehH = 0.0;
-                    vehH = (route.getStops().get(route.getStops().size() - 1).getArrivalOffset() -
-                            route.getStops().get(0).getDepartureOffset()) / 3600;
+                    vehH = (route.getStops().get(route.getStops().size() - 1).getArrivalOffset().seconds() -
+                            route.getStops().get(0).getDepartureOffset().seconds()) / 3600;
 
                     totVehKM += (route.getDepartures().size() * vehKM);
                     totVehH += (route.getDepartures().size() * vehH);

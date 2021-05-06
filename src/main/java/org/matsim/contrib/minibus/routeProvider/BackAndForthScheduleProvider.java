@@ -163,8 +163,8 @@ final class BackAndForthScheduleProvider implements PRouteProvider{
 		int n = 0;
 		
 		// driver rest after each route
-		int headway = (int) (2 * this.driverRestTime + transitRouteBack.getStops().get(transitRouteBack.getStops().size() - 1).getDepartureOffset() + 
-				transitRouteForth.getStops().get(transitRouteForth.getStops().size() - 1).getDepartureOffset()) / numberOfVehicles;
+		int headway = (int) (2 * this.driverRestTime + transitRouteBack.getStops().get(transitRouteBack.getStops().size() - 1).getDepartureOffset().seconds() +
+				transitRouteForth.getStops().get(transitRouteForth.getStops().size() - 1).getDepartureOffset().seconds()) / numberOfVehicles;
 		
 		// possibility to introduce a maximal frequency
 		// headway = Math.max(5*60, headway);
@@ -174,12 +174,12 @@ final class BackAndForthScheduleProvider implements PRouteProvider{
 				Departure departureBack = this.scheduleWithStopsOnly.getFactory().createDeparture(Id.create(n, Departure.class), j);
 				departureBack.setVehicleId(Id.create(pLineId + "-" + routeId + "-" + n +"_" + pVehicleType + "-Back-" + i, Vehicle.class));
 				transitRouteBack.addDeparture(departureBack);
-				j += transitRouteBack.getStops().get(transitRouteBack.getStops().size() - 1).getDepartureOffset() + this.driverRestTime;
+				j += transitRouteBack.getStops().get(transitRouteBack.getStops().size() - 1).getDepartureOffset().seconds() + this.driverRestTime;
 				
 				Departure departureForth = this.scheduleWithStopsOnly.getFactory().createDeparture(Id.create(n, Departure.class), j);
 				departureForth.setVehicleId(Id.create(pLineId + "-" + routeId + "-" + n +"_" + pVehicleType + "-Forth-" + i, Vehicle.class));
 				transitRouteForth.addDeparture(departureForth);
-				j += transitRouteForth.getStops().get(transitRouteForth.getStops().size() - 1).getDepartureOffset() + this.driverRestTime;
+				j += transitRouteForth.getStops().get(transitRouteForth.getStops().size() - 1).getDepartureOffset().seconds() + this.driverRestTime;
 				n++;
 			}
 		}		

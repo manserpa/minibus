@@ -62,17 +62,11 @@ class PVehiclesFactory {
 		for (PVehicleSettings settings : pConfig.getPVehicleSettings()) {
 			String type = settings.getPVehicleName();
 			VehicleType vehType = vehFactory.createVehicleType(Id.create(type, VehicleType.class));
-			
-			VehicleCapacity capacity = new VehicleCapacityImpl();
-			capacity.setSeats(settings.getCapacityPerVehicle() + 1); // july 2011 the driver takes one seat
-			capacity.setStandingRoom(0);
-			vehType.setCapacity(capacity);
+
+			vehType.getCapacity().setSeats(settings.getCapacityPerVehicle() + 1);
 
 			vehType.setPcuEquivalents(this.pConfig.getPassengerCarEquivalents());
 			vehType.setMaximumVelocity(this.pConfig.getVehicleMaximumVelocity());
-			vehType.setAccessTime(this.pConfig.getDelayPerBoardingPassenger());
-			vehType.setEgressTime(this.pConfig.getDelayPerAlightingPassenger());
-			vehType.setDoorOperationMode(this.pConfig.getDoorOperationMode());
 			vehicles.addVehicleType( vehType);
 		}
 		

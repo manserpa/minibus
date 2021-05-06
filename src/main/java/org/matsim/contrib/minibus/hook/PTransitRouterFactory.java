@@ -19,11 +19,9 @@
 
 package org.matsim.contrib.minibus.hook;
 
-import ch.sbb.matsim.routing.pt.raptor.RaptorConfig;
-import ch.sbb.matsim.routing.pt.raptor.RaptorUtils;
-import ch.sbb.matsim.routing.pt.raptor.SwissRailRaptor;
-import ch.sbb.matsim.routing.pt.raptor.SwissRailRaptorData;
+import ch.sbb.matsim.routing.pt.raptor.*;
 import org.apache.log4j.Logger;
+import org.matsim.api.core.v01.network.Network;
 import org.matsim.contrib.minibus.PConfigGroup;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
@@ -34,8 +32,6 @@ import org.matsim.pt.transitSchedule.api.TransitSchedule;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 
 /**
  *
@@ -55,6 +51,7 @@ class PTransitRouterFactory implements Provider<TransitRouter> {
 	private TransitRouterNetwork routerNetwork = null;
 	private Provider<TransitRouter> routerFactory = null;
 	@Inject private TransitSchedule schedule;
+	@Inject private Network network;
 	private SwissRailRaptorData raptorParams;
 
 	public PTransitRouterFactory(Config config){
@@ -72,8 +69,8 @@ class PTransitRouterFactory implements Provider<TransitRouter> {
 	void updateTransitSchedule() {
 		this.needToUpdateRouter = true;
 
-		RaptorConfig raptorConfig = RaptorUtils.createRaptorConfig(this.config);
-		this.raptorParams = SwissRailRaptorData.create(this.schedule, raptorConfig);
+		RaptorStaticConfig raptorConfig = RaptorUtils.createStaticConfig(config);
+		this.raptorParams = SwissRailRaptorData.create(this.schedule, null, raptorConfig, this.network, null);
 
 	}
 
@@ -95,7 +92,10 @@ class PTransitRouterFactory implements Provider<TransitRouter> {
 		if ( this.raptorParams == null) {
 			updateTransitSchedule();
 		}
-		return new SwissRailRaptor(this.raptorParams);
+		return new SwissRailRaptor(this.raptorParams, new DefaultRaptorParametersForPerson(config),
+				new LeastCostRaptorRouteSelector(),
+				new DefaultRaptorStopFinder(config, null, null),
+				null, null);
 	}
 }
 

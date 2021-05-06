@@ -140,11 +140,11 @@ public final class CreateOperatorFromTransitSchedule implements PStrategy {
 		// current planned headway in case number of vehicles is not changed
 		double departureOffset = 0.0;
 		if (longestRouteH != null) {
-			departureOffset += longestRouteH.getStops().get(longestRouteH.getStops().size() - 1).getDepartureOffset();
+			departureOffset += longestRouteH.getStops().get(longestRouteH.getStops().size() - 1).getDepartureOffset().seconds();
 		}
 		
 		if (longestRouteR != null) {
-			departureOffset += longestRouteR.getStops().get(longestRouteR.getStops().size() - 1).getDepartureOffset();
+			departureOffset += longestRouteR.getStops().get(longestRouteR.getStops().size() - 1).getDepartureOffset().seconds();
 		}
 		
 		double headway = departureOffset / vehicleIds.size(); 

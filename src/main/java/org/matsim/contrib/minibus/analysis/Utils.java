@@ -1,6 +1,5 @@
 package org.matsim.contrib.minibus.analysis;
 
-import javafx.collections.transformation.TransformationList;
 import org.matsim.api.core.v01.Id;
 import org.matsim.contrib.minibus.genericUtils.CSVReader;
 import org.matsim.pt.transitSchedule.api.TransitLine;

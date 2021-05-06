@@ -4,7 +4,7 @@ import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.core.config.ConfigUtils;
-import org.matsim.core.network.io.NetworkReaderMatsimV2;
+import org.matsim.core.network.io.MatsimNetworkReader;
 import org.matsim.core.scenario.ScenarioUtils;
 import org.matsim.pt.transitSchedule.api.*;
 
@@ -18,7 +18,7 @@ public class NetworkLength {
         Set<String> stopIds = new HashSet<>();
 
         Scenario scenario = ScenarioUtils.createScenario(ConfigUtils.createConfig());
-        new NetworkReaderMatsimV2(scenario.getNetwork()).readFile(args[0]);
+        new MatsimNetworkReader(scenario.getNetwork()).readFile(args[0]);
         new TransitScheduleReader(scenario).readFile(args[1]);
 
         // reference case

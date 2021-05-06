@@ -50,8 +50,8 @@ public final class ChooseVehicleType extends AbstractPStrategyModule {
 		TransitRoute routeForth = oldPlan.getLine().getRoutes().get(routeIdForth);
 		TransitRoute routeBack = oldPlan.getLine().getRoutes().get(routeIdBack);
 		double numberOfVehiclesOld = oldPlan.getTotalPassengerKilometer() / oldPlan.getPassengerKilometerPerVehicle();
-		double headway = (2 * this.pConfig.getDriverRestTime() + routeBack.getStops().get(routeBack.getStops().size() - 1).getDepartureOffset() + 
-				routeForth.getStops().get(routeForth.getStops().size() - 1).getDepartureOffset()) / numberOfVehiclesOld;
+		double headway = (2 * this.pConfig.getDriverRestTime() + routeBack.getStops().get(routeBack.getStops().size() - 1).getDepartureOffset().seconds() +
+				routeForth.getStops().get(routeForth.getStops().size() - 1).getDepartureOffset().seconds()) / numberOfVehiclesOld;
 		//double headway =  (this.pConfig.getDriverRestTime() + route.getStops().get(route.getStops().size() - 1).getDepartureOffset()) / numberOfVehiclesOld;
 		//double headway = oldPlan.getHeadway();
 		double vehiclesPerHourOld = 3600 / headway;
@@ -154,8 +154,8 @@ public final class ChooseVehicleType extends AbstractPStrategyModule {
 			// calculation of the EXPECTED new occupancy 
 			
 			//double headwayNew =  (this.pConfig.getDriverRestTime() + route.getStops().get(route.getStops().size() - 1).getDepartureOffset()) / newPlan.getNVehicles();
-			double headwayNew = (2 * this.pConfig.getDriverRestTime() + routeBack.getStops().get(routeBack.getStops().size() - 1).getDepartureOffset() + 
-					routeForth.getStops().get(routeForth.getStops().size() - 1).getDepartureOffset()) / newPlan.getNVehicles();
+			double headwayNew = (2 * this.pConfig.getDriverRestTime() + routeBack.getStops().get(routeBack.getStops().size() - 1).getDepartureOffset().seconds() +
+					routeForth.getStops().get(routeForth.getStops().size() - 1).getDepartureOffset().seconds()) / newPlan.getNVehicles();
 			double vehiclesPerHourNew = 3600 / headwayNew;
 
 			newPlan.setHeadway(headwayNew);
